@@ -1,0 +1,64 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@drawable/bg"
+        android:weightSum= "10"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:text= "CHARADAS"
+            android:textColor= "@android:color/white"
+            android:gravity="center"
+            android:layout_width="388.5dp"
+            android:layout_height="91.0dp"
+            android:fontFamily='sans-serif-smallcaps'
+            android:textSize = "40sp"
+                  android:textStyle="bold"
+            android:layout_marginBottom="0.0dp" />
+        <TextView
+            android:text="Adivina que soy!"
+            android:textColor= "@android:color/white"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="27.5dp"
+            android:fontFamily='sans-serif-smallcaps'
+            android:textSize = "20sp"
+            
+            android:id="@+id/textView2" />
+        <TextView
+            android:text="Categorías"
+            android:textColor= "@android:color/white"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="72.5dp"
+            android:fontFamily='serif'
+            android:textSize = "30sp"
+            android:textStyle="bold"
+            android:id="@+id/textView3"
+            />
+
+        
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler-view"
+            android:layout_weight="8"
+            android:layout_width= "match_parent"
+            android:layout_height="0dp"
+            android:padding= "14dp"/>
+
+
+
+
+    </LinearLayout>
+</RelativeLayout>
