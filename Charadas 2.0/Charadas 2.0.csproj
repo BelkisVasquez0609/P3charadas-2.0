@@ -238,11 +238,6 @@
     <AndroidResource Include="Resources\drawable\CHARADAS.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\SplashScreen.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\Splash.jpg" />
   </ItemGroup>
   <ItemGroup>

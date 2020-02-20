@@ -37,10 +37,7 @@ namespace Charadas_2._0
             recyclerView = FindViewById<RecyclerView>(Resource.Id.recycler_view);
         }
 
-        private T FindViewById<T>(object recycler_view)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         private void SetData()
         {
