@@ -14,6 +14,6 @@ namespace Charadas_2._0
 {
     class Comun
     {
-        public const int NUM_OF_COLUM = 2;
+        public const int NUM_OF_COLUM = 3;
     }
 }
