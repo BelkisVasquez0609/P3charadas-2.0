@@ -78,7 +78,7 @@ namespace Charadas_2._0
                 {
                     var result = await client.Get<Categoria>("https://api-charadas.azurewebsites.net/api/categorias/" + i.ToString()).ConfigureAwait(false);
 
-                    itemList.Add(new MyItem(Resource.Drawable.me_time, result.Descripcion));
+                    itemList.Add(new MyItem(Resource.Drawable.ANIMALS, result.Descripcion));
 
                 }
                 catch (System.Exception)

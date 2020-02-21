@@ -44,18 +44,20 @@ namespace Charadas_2._0.Adapter
 
         }
         public override int ItemCount => itemList.Count();
-        public String[] mColors = { "#3F51B5", "#FF9800", "#009688", "#673AB7","#3F51B5", "#FF9800", "#009688","#009688", "#3F51B5" };
+        public String[] mColors = { "#B1B1B1", "#7CAE0F", "#EDAE23", "#029DBC","#47464C", "#CA0B10", "#E24F60","#702254", "#EC4525" };
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
-            //arreglar esto, el color 
             
-            holder.ItemView.SetBackgroundColor(Color.ParseColor(mColors[position % 9])); // 4 can be replaced by mColors.length
             MyViewHolder myViewHolder = holder as MyViewHolder;
+            //arreglar esto, el color 
+            myViewHolder.BackgroundItem.SetBackgroundColor(Color.ParseColor(mColors[position % mColors.Length]));
+
             myViewHolder.img_icon.SetImageResource(itemList[position].Icon);
             myViewHolder.txt_description.Text= itemList[position].Descripcion;
             myViewHolder.SetOnClick(new Categoria(context, itemList[position]));
+            //myViewHolder.BotonJugar.SetOnClickListener(this);
 
-            
+
 
         }
 
@@ -71,7 +73,8 @@ namespace Charadas_2._0.Adapter
             public TextView txt_description;
             public ImageView img_icon;
             ListaCard listener;
-            
+            public LinearLayout BackgroundItem;
+            public Button BotonJugar;
 
             public void SetOnClick (ListaCard listaCard)
             {
@@ -82,11 +85,16 @@ namespace Charadas_2._0.Adapter
                 txt_description = itemView.FindViewById<TextView>(Resource.Id.txt_description);
                 img_icon = itemView.FindViewById<ImageView>(Resource.Id.img_icon);
                 itemView.SetOnClickListener(this);
+                //  BackgroundItem = LinearLayout.FindViewById(Resource.Id.);
+                BotonJugar = (Button)itemView.FindViewById(Resource.Id.bottom);
+                BackgroundItem = (LinearLayout)itemView.FindViewById(Resource.Id.LinearLayautCategorias);
             }
 
             public void OnClick(View v)
             {
                 listener.OnListaCard(v, AdapterPosition);
+              
+               
             }
         }
 
