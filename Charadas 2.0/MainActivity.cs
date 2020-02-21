@@ -2,12 +2,19 @@
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Runtime;
-using Android.Widget;
 using Android.Support.V7.Widget;
 using Charadas_2._0.Adapter;
 using Charadas_2._0.Models;
 using System.Collections.Generic;
-using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using static Android.Provider.SyncStateContract;
+using Newtonsoft.Json;
+using DocumentFormat.OpenXml.Spreadsheet;
+using System.Net;
+using Android.Webkit;
+using Newtonsoft.Json.Linq;
+
 
 namespace Charadas_2._0
 {
@@ -18,7 +25,8 @@ namespace Charadas_2._0
         MyAdapter adapter;
         List<MyItem> itemList;
 
-        protected override void OnCreate(Bundle savedInstanceState)
+
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.SetTheme(Resource.Style.AppTheme);
             base.OnCreate(savedInstanceState);
@@ -26,7 +34,7 @@ namespace Charadas_2._0
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
 
-            InitData();
+            await InitDataAsync();
             InitView();
             SetData();
 
@@ -52,24 +60,36 @@ namespace Charadas_2._0
             recyclerView.SetAdapter(adapter);
         }
 
-       
-
       
 
-        private void InitData()
+
+
+        private async Task InitDataAsync()
         {
             itemList = new List<MyItem>();
             //Yo voy a enviar 7 por default 
-                                                     //aqui llamo la imagen, y aqui el titulo
-            itemList.Add(new MyItem(Resource.Drawable.me_time, "Politica"));
-            itemList.Add(new MyItem(Resource.Drawable.family_time, "Adivinanzas"));
-            itemList.Add(new MyItem(Resource.Drawable.lovely_time , "Deportes"));
-            itemList.Add(new MyItem(Resource.Drawable.team_time, "Acciones"));
-            itemList.Add(new MyItem(Resource.Drawable.friends, "Animales"));
-            itemList.Add(new MyItem(Resource.Drawable.calendar, "Objetos"));
-            itemList.Add(new MyItem(Resource.Drawable.calendar, "Actores"));
+            //aqui llamo la imagen, y aqui el titulo
+            WSClient client = new WSClient();
 
-            //Aqui vamos a tener 3 lineas de 2 filas (2*3) y 1 tamano entero
+           
+            for (int i = 1; i <= 9; i++)
+            {
+                try
+                {
+                    var result = await client.Get<Categoria>("https://api-charadas.azurewebsites.net/api/categorias/" + i.ToString()).ConfigureAwait(false);
+
+                    itemList.Add(new MyItem(Resource.Drawable.me_time, result.Descripcion));
+
+                }
+                catch (System.Exception)
+                {
+
+                  
+                }
+              
+
+            }
+
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
@@ -97,6 +117,17 @@ namespace Charadas_2._0
                     default:return -1;
                 }
             }
+        }
+    }
+
+    public class WSClient
+    {
+        public async Task<T> Get<T>(string url)
+        {
+            HttpClient client = new HttpClient();
+            var response = await client.GetAsync(url);
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }
