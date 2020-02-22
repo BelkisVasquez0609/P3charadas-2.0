@@ -1,0 +1,21 @@
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <TextView
+        android:text="El Penco"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="353.0dp"
+        android:id="@+id/textView1"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:typeface="monospace"
+        android:onClick="amen()" />
+
+</LinearLayout>

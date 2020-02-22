@@ -14,7 +14,8 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using System.Net;
 using Android.Webkit;
 using Newtonsoft.Json.Linq;
-
+using System.Threading;
+using Android.Widget;
 
 namespace Charadas_2._0
 {
@@ -30,10 +31,10 @@ namespace Charadas_2._0
         {
             base.SetTheme(Resource.Style.AppTheme);
             base.OnCreate(savedInstanceState);
+            Thread.Sleep(2000);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
-
             await InitDataAsync();
             InitView();
             SetData();
