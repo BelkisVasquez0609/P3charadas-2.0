@@ -65,6 +65,7 @@
     <Compile Include="Adapter\MyAdapter.cs" />
     <Compile Include="Categoria.cs" />
     <Compile Include="Comun.cs" />
+    <Compile Include="Gyroscopecharadas.cs" />
     <Compile Include="Interface\ListaCard.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Models\MyItem.cs" />

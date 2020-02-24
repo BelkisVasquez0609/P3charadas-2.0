@@ -8,6 +8,7 @@ using Charadas_2._0.Models;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Timers;
 using static Android.Provider.SyncStateContract;
 using Newtonsoft.Json;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -16,15 +17,18 @@ using Android.Webkit;
 using Newtonsoft.Json.Linq;
 using System.Threading;
 using Android.Widget;
+using Timer = System.Timers.Timer;
+using System;
 
 namespace Charadas_2._0
 {
-    [Activity(Label = "CHARADAS",Icon = "@drawable/CHARADAS", Theme = "@style/splash", MainLauncher = true)]
+    [Activity(Label = "CHARADAS",Icon = "@drawable/CHARADAS", Theme = "@style/splash", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : AppCompatActivity
     {
         RecyclerView recyclerView;
         MyAdapter adapter;
         List<MyItem> itemList;
+       
 
 
         protected override async void OnCreate(Bundle savedInstanceState)
@@ -32,12 +36,18 @@ namespace Charadas_2._0
             base.SetTheme(Resource.Style.AppTheme);
             base.OnCreate(savedInstanceState);
             Thread.Sleep(2000);
-            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
             await InitDataAsync();
+
             InitView();
             SetData();
+          //  var x = new Gyroscopecharadas(this);
+            //x.ToggleGyroscope();
+            //Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+
+
+
 
         }
 
@@ -46,7 +56,8 @@ namespace Charadas_2._0
             recyclerView = FindViewById<RecyclerView>(Resource.Id.recycler_view);
         }
 
-       
+      
+
 
         private void SetData()
         {
@@ -68,7 +79,7 @@ namespace Charadas_2._0
         private async Task InitDataAsync()
         {
             itemList = new List<MyItem>();
-            //Yo voy a enviar 7 por default 
+        
             //aqui llamo la imagen, y aqui el titulo
             WSClient client = new WSClient();
 

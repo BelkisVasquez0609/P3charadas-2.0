@@ -45,13 +45,16 @@ namespace Charadas_2._0.Adapter
 
         }
         public override int ItemCount => itemList.Count();
-        public String[] mColors = { "#B1B1B1", "#7CAE0F", "#EDAE23", "#029DBC", "#47464C", "#CA0B10", "#E24F60", "#702254", "#EC4525" };
+        public String[] cColors = { "#B1B1B1", "#7CAE0F", "#EDAE23", "#029DBC", "#47464C", "#CA0B10", "#E24F60", "#702254", "#EC4525" };
+       // public String[] nColors = { "#B1B1B1", "#7CAE0F", "#EDAE23", "#029DBC", "#47464C", "#CA0B10", "#E24F60", "#702254", "#EC4525" };
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
 
             MyViewHolder myViewHolder = holder as MyViewHolder;
 
-            myViewHolder.BackgroundItem.SetBackgroundColor(Color.ParseColor(mColors[position % mColors.Length]));
+            myViewHolder.BackgroundItem.SetBackgroundColor(Color.ParseColor(cColors[position % cColors.Length]));
+
+           // myViewHolder.BackgroundNombre.SetBackgroundColor(Color.ParseColor(nColors[position%nColors.Length]));
 
             myViewHolder.img_icon.SetImageResource(itemList[position].Icon);
             myViewHolder.txt_description.Text = itemList[position].Descripcion;
@@ -80,9 +83,9 @@ namespace Charadas_2._0.Adapter
             ListaCard listener;
             public LinearLayout BackgroundItem;
             public Button BotonJugar1;
-           public  Context context;
-
-            public void SetOnClick(ListaCard listaCard)
+            public  Context context;
+            public LinearLayout BackgroundNombre;
+        public void SetOnClick(ListaCard listaCard)
             {
                 this.listener = listaCard;
 
@@ -94,13 +97,16 @@ namespace Charadas_2._0.Adapter
                 itemView.SetOnClickListener(this);
                 BotonJugar1 = (Button)itemView.FindViewById(Resource.Id.BotonJugar);
                 BackgroundItem = (LinearLayout)itemView.FindViewById(Resource.Id.LinearLayautCategorias);
-                //AQUI VA GETCONTEXT ES 
-                context = itemView.Context;
+              //  BackgroundNombre = (LinearLayout)itemView.FindViewById(Resource.Id.LinearLayautBackgroundNombre);
+
+            context = itemView.Context;
 
                 BotonJugar1.Click += delegate
                 {
                     OnClick(itemView);
+                   
                 };
+
             }
 
            public  void SetOnClickListeners()
@@ -117,10 +123,12 @@ namespace Charadas_2._0.Adapter
             var NxtAct = new Intent(Application.Context, typeof(ActivityNombre));
             context.StartActivity(NxtAct);
 
-        }
 
 
         }
+       
+
+    }
 
         public class Categoria : ListaCard
         {
