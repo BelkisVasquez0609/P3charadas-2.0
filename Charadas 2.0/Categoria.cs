@@ -4,6 +4,6 @@
     {
         public int id { get; set; }
         public string Descripcion { get; set; }
-        public byte[] Imagen { get; set; }
+        public byte[] imagen { get; set; }
     }
 }

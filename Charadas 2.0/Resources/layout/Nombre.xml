@@ -9,17 +9,22 @@
     android:id="@+id/linearlayaut"
    >
     <Button
-        android:text="Volver a jugar"
-        android:layout_width="wrap_content"
-        android:layout_height="48.0dp"
+        android:background="@color/mtrl_btn_transparent_bg_color"
+        android:textStyle="bold"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:text="VOLVER A JUGAR"
+        android:layout_width="match_parent"
+        android:layout_height="59.0dp"
         android:id="@+id/siguente"
-        android:layout_marginBottom="0.0dp" />
+        android:layout_marginBottom="0.0dp"/>
 
     <TextView
         android:text="Pongaselo en la cabeza"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
-        android:layout_height="171.0dp"
+        android:layout_height="208.0dp"
         android:id="@+id/textView1"
         android:textSize="50dp"
         android:textStyle="bold"
@@ -37,10 +42,5 @@
         android:id="@+id/txtCountDown"
         android:layout_marginBottom="11.5dp"
         android:textColor="#ffffffff" />
-    <Button
-        android:text="Cambiar de categoria"
-        android:layout_width="wrap_content"
-        android:layout_height="48.0dp"
-        android:id="@+id/CambiarCat" />
 
 </LinearLayout>

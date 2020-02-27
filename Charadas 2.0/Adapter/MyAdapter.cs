@@ -14,7 +14,7 @@ using Android.Widget;
 using Charadas_2._0.Interface;
 using Charadas_2._0.Models;
 using Android.Graphics;
-
+using System.Drawing;
 
 namespace Charadas_2._0.Adapter
 {
@@ -22,10 +22,10 @@ namespace Charadas_2._0.Adapter
     {
         Context context;
         List<MyItem> itemList;
-
+        
         public override int GetItemViewType(int position)
         {
-
+            
             if (itemList.Count == 1) { return 0; }//si solo hay un item que lo despliegue 
                                                   //como si fuera una columna
             else
@@ -38,27 +38,28 @@ namespace Charadas_2._0.Adapter
                 // Si la posicion es la ultima, que lo ponga del tamano de la pantalla
             }
         }
+        public int Gidcategoria = 0;
         public MyAdapter(Context context, List<MyItem> itemList)
         {
+
             this.context = context;
             this.itemList = itemList;
-
+           
         }
         public override int ItemCount => itemList.Count();
         public String[] cColors = { "#B1B1B1", "#7CAE0F", "#EDAE23", "#029DBC", "#47464C", "#CA0B10", "#E24F60", "#702254", "#EC4525" };
-
+        MyViewHolder myViewHolder;
       public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
 
-            MyViewHolder myViewHolder = holder as MyViewHolder;
-            
-            myViewHolder.BackgroundItem.SetBackgroundColor(Color.ParseColor(cColors[position % cColors.Length]));
+             myViewHolder = holder as MyViewHolder;
+        
+            myViewHolder.BackgroundItem.SetBackgroundColor(Android.Graphics.Color.ParseColor(cColors[position % cColors.Length]));
             //myViewHolder.BackgroundNombre.SetBackgroundColor(Color.ParseColor);
-
-            // myViewHolder.BackgroundNombre.SetBackgroundColor(Color.ParseColor(nColors[position%nColors.Length]));
-
-            myViewHolder.img_icon.SetImageResource(itemList[position].Icon);
+                    
+            myViewHolder.img_icon.SetImageBitmap(itemList[position].imagen);
             myViewHolder.txt_description.Text = itemList[position].Descripcion;
+            myViewHolder.idcategorias = itemList[position].Gidcategoria;
             myViewHolder.SetOnClick(new Categoria(context, itemList[position]));
             myViewHolder.SetOnClickListeners();
 
@@ -73,7 +74,6 @@ namespace Charadas_2._0.Adapter
             View itemView = LayoutInflater.From(context).Inflate(Resource.Layout.layout_Categorias, parent, false);
             return new MyViewHolder(itemView);
         }
-        //AQUI E
        
 
     }
@@ -86,7 +86,8 @@ namespace Charadas_2._0.Adapter
             public Button BotonJugar1;
             public  Context context;
             public LinearLayout BackgroundNombre;
-      
+            public int idcategorias = 0;
+
         public void SetOnClick(ListaCard listaCard)
             {
                 this.listener = listaCard;
@@ -100,7 +101,7 @@ namespace Charadas_2._0.Adapter
                 BotonJugar1 = (Button)itemView.FindViewById(Resource.Id.BotonJugar);
                 BackgroundItem = (LinearLayout)itemView.FindViewById(Resource.Id.LinearLayautCategorias);
                BackgroundNombre = (LinearLayout)itemView.FindViewById(Resource.Id.linearlayaut);
-
+             
                 context = itemView.Context;
 
                 BotonJugar1.Click += delegate
@@ -117,15 +118,14 @@ namespace Charadas_2._0.Adapter
                
 
             }
-        
+        public Intent NxtAct;
         public void OnClick(View v)
             {
                 listener.OnListaCard(v, AdapterPosition);
             // var m_activity = Intent(this, typeof(Nombre));
-            var NxtAct = new Intent(Application.Context, typeof(ActivityNombre));
+            NxtAct = new Intent(Application.Context, typeof(ActivityNombre));
+            NxtAct.PutExtra("Categoria", idcategorias.ToString());
             context.StartActivity(NxtAct);
-
-
 
         }
        

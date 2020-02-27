@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -18,5 +18,10 @@ namespace Charadas_2._0
         public int Id_Nombre { get; set; }
         public string Nombre1 { get; set; }
         public int id_categoria { get; set; }
+
+        public static implicit operator Nombres(Task<Nombres> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

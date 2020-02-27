@@ -19,6 +19,9 @@ using System.Threading;
 using Android.Widget;
 using Timer = System.Timers.Timer;
 using System;
+using System.IO;
+using System.Drawing;
+using Android.Graphics;
 
 namespace Charadas_2._0
 {
@@ -28,9 +31,8 @@ namespace Charadas_2._0
         RecyclerView recyclerView;
         MyAdapter adapter;
         List<MyItem> itemList;
-       
-
-
+        
+        public Android.App.AlertDialog Alerta;
         protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.SetTheme(Resource.Style.AppTheme);
@@ -42,22 +44,29 @@ namespace Charadas_2._0
 
             InitView();
             SetData();
-          //  var x = new Gyroscopecharadas(this);
+            Alerta = new Android.App.AlertDialog.Builder(this).Create();
+
+            //  var x = new Gyroscopecharadas(this);
             //x.ToggleGyroscope();
             //Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-
-
-
-
+            
+        }
+        public byte[] ImageToByteArray(System.Drawing.Image imagen)
+        {
+            System.IO.MemoryStream ms = new MemoryStream();
+            imagen.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            return ms.ToArray();
+        }
+        public static Image ByteArrayToImage(byte[] byteArrayIn)
+        {
+            MemoryStream imagen = new MemoryStream(byteArrayIn);
+            return Image.FromStream(imagen);
         }
 
         private void InitView()
         {
             recyclerView = FindViewById<RecyclerView>(Resource.Id.recycler_view);
         }
-
-      
-
 
         private void SetData()
         {
@@ -72,10 +81,7 @@ namespace Charadas_2._0
             recyclerView.SetAdapter(adapter);
         }
 
-      
-
-
-
+        Categoria cat;
         private async Task InitDataAsync()
         {
             itemList = new List<MyItem>();
@@ -90,8 +96,15 @@ namespace Charadas_2._0
                 {
                     var result = await client.Get<Categoria>("https://api-charadas.azurewebsites.net/api/categorias/" + i.ToString()).ConfigureAwait(false);
 
-                    itemList.Add(new MyItem(Resource.Drawable.ANIMALS, result.Descripcion));
+                    cat = result;
 
+
+                    var img = BitmapFactory.DecodeByteArray(cat.imagen, 0, cat.imagen.Length); 
+                    
+           
+
+                    itemList.Add(new MyItem(img, cat.Descripcion,cat.id));//Resource.Drawable.ANIMALS
+                   
                 }
                 catch (System.Exception)
                 {
