@@ -12,6 +12,7 @@ using Android.Widget;
 using Xamarin.Essentials;
 using Timer = System.Timers.Timer;
 using Android.Graphics;
+using Android.Speech;
 
 namespace Charadas_2._0
 {
@@ -22,29 +23,28 @@ namespace Charadas_2._0
 
         public TextView x;
         private Button Siguente;
-        SensorSpeed speed = SensorSpeed.Game;
         private TextView TxtCountDown;
         private LinearLayout Layout;
-        private int Count = 60;
+        private int CountGB = 60;
         Timer timer;
         public Context context;
         Vector3 vector = new Vector3();
         public int Categoria = 0;
-       // bool nuevapregunta = false;
-
-        //  static Random rand = new Random();
-
+        Nombres Nom;
         int bueno;
         int malo;
         bool click = true;
+        bool accel = true;
         public AlertDialog Alerta;
+
+        readonly int VOICE = 0;
 
         protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.Nombre);
-
+             timer = new Timer();
             try
             {
 
@@ -63,28 +63,28 @@ namespace Charadas_2._0
                 return;
             Accelerometer.ReadingChanged += Accelerometer_ReadingChangedAsync;
             Accelerometer.Start(SensorSpeed.Game);
+            timer.AutoReset = true;
+            Layout.SetBackgroundColor(Color.DarkBlue);
+            await SpeakNowDefaultSettings("Ponerse el Celular en la Cabeza");
+            Thread.Sleep(5000);
+            await Amen();
             }
             catch (Exception)
             {
 
             }
-            Thread.Sleep(5000);
-            await Amen();
-
-            TxtCountDown.Click += async delegate
+         
+            try
+            {
+                x.Click += delegate
                 {
                     if (click == true)
                     {
-                        await Amen();
-                        bueno++;
-                    }
-                };
-                x.Click += async delegate
-                {
-                    if (click == true)
-                    {
-                        await Amen();
-                        malo++;
+                        try
+                        {
+                            SpeakaerBool();
+                        }
+                        catch (Exception) {}
 
                     }
                 };
@@ -93,12 +93,18 @@ namespace Charadas_2._0
 
             Siguente.Click += async delegate
             {
+               
                 Reinicio();
                 click = true;
+                await SpeakNowDefaultSettings("Ponerse el Celular en la Cabeza").ConfigureAwait(false);
+
                 x.Text = "Pongaselo en la Cabeza";
                 Thread.Sleep(5000);
                 await Amen();
             };
+
+            }
+            catch (Exception) {}
         }
 
         private void Reinicio()
@@ -111,12 +117,13 @@ namespace Charadas_2._0
             Alerta.Show();
             Alerta.Cancel();
             Accelerometer.Start(SensorSpeed.Game);
-            
-            Count = 60;
+
+            CountGB = 60;
             bueno = 0;
             malo = 0;
-            
-            OnResume2();
+
+                OnResume();
+               
 
             }
             catch (Exception)
@@ -128,30 +135,7 @@ namespace Charadas_2._0
 
         }
 
-        private void OnResume2()
-        {
-            try
-            {
-
-            base.OnResume();
-            timer = new Timer
-            {
-                Interval = 10000 
-            };
-            timer.Elapsed += Timer_Elapsed;
-            timer.Start();
-
-            }
-            catch (Exception)
-            {
-
-                
-            }
-        }
-
-    
-
-        private void Accelerometer_ReadingChangedAsync(object sender, AccelerometerChangedEventArgs e)
+        private async void Accelerometer_ReadingChangedAsync(object sender, AccelerometerChangedEventArgs e)
         {
             try
             {
@@ -160,146 +144,107 @@ namespace Charadas_2._0
             vector.X = e.Reading.Acceleration.X;
             vector.Y = e.Reading.Acceleration.Y;
             vector.Z = e.Reading.Acceleration.Z;
-         
-                GetVector();
-            }
-            catch (Exception)
-            {
 
-               
+                await GetVectorAsync();
             }
+            catch (Exception) {}
 
         }
-
-
-        public void GetVector()
+        
+        public async Task GetVectorAsync()
         {
             try
             {
-
-           
-
-            if (vector.Z >= 1)
+            if (vector.Z >= 0.7)
             {
-                x.Text = "¡Incorrecto!";
-                Layout.SetBackgroundColor(Color.Red);
+                    if (accel == true)
+                    {
+                        accel = false;
+                        Layout.SetBackgroundColor(Color.Red);
+                        malo++;
+                        await Amen();
+                        await SpeakNowDefaultSettings("Respuesta Incorrecta");
 
-             
+                    }
 
-
-
-            }
-            else if (vector.Z <= -0.8)
+                }
+            else if (vector.Z <= -0.7)
             {
+                    if (accel == true)
+                    {
+                        accel = false;
+                        Layout.SetBackgroundColor(Color.Green);
+                        bueno++;
+                        await Amen();
+                        await SpeakNowDefaultSettings("Respuesta Correcta");
 
-                x.Text = "¡Correcto!";
+                    }
 
-            
-                Layout.SetBackgroundColor(Color.Green);
-
-
-            }
-            else if (vector.Z > -0.7 && vector.Z < 0.7)
-            {
-
-
-                Layout.SetBackgroundColor(Color.DarkSlateBlue);
-            }
-
-            }
-            catch (Exception)
+                }
+            else 
             {
 
-               
+                   accel = true;
+                    Layout.SetBackgroundColor(Color.DarkSlateBlue);
             }
+
+            }
+            catch (Exception){}
         }
-
 
         protected override void OnResume()
         {
             try
             {
                 base.OnResume();
-                timer = new Timer
-                {
-                    Interval = 1000 // 1 segundo
-                };
+                timer.Interval = 1000;
                 timer.Elapsed += Timer_Elapsed;
                 timer.Start();
+              
             
             }
             catch (Exception)
-            {
-
-            
-            }
+            {}
            
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private async void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             try
             {
 
-           
-            Siguente.Visibility = ViewStates.Invisible;
-           // CambiarCat.Visibility = ViewStates.Invisible;
-       
-            if (Count <= 60 && Count >= 1)//los 60 segundos
-            {
-               
-                Count--;
-                
-                RunOnUiThread(() =>
-                {
-                    TxtCountDown.Text = ""  + Count; //se actualiza el valor
-
-                });
-            }
-            else
-            {
                 Siguente.Visibility = ViewStates.Invisible;
-                // CambiarCat.Visibility = ViewStates.Invisible;
 
-                if (Count <= 60 && Count >= 1)//los 60 segundos
+                if (CountGB <= 60 && CountGB >= 1)//los 60 segundos
                 {
+                    CountGB--;
+                    TxtCountDown.Text = "" + CountGB; //se actualiza el valor
 
-                    Count--;
-
-                    RunOnUiThread(() =>
-                    {
-                        TxtCountDown.Text = "" + Count; //se actualiza el valor
-
-                    });
                 }
                 else
                 {
-                        click = false;
-                    //View itemView = LayoutInflater.From(context).Inflate(Resource.Layout.activity_main,null , false);
+                    //await SpeakNowDefaultSettings("Buenos:" + bueno.ToString() + "  " + " - Malos: " + malo.ToString()).ConfigureAwait(false);
+
+                    click = false;
                     TxtCountDown.Text = "¡¡¡SE ACABO EL TIEMPO!!!";
-
                     Accelerometer.Stop();
-                    x.Text = "Buenos: " + bueno.ToString() + " - Malo: " + malo.ToString(); ;
-                 
+
+                    x.Text = "Buenos: " + bueno.ToString() + " - Malos: " + malo.ToString();
                     Siguente.Visibility = ViewStates.Visible;
-
-
-                    Alerta.Show();
+                 
                     timer.Stop();
+  
+
 
                 }
-            }
+
 
             }
             catch (Exception)
-            {
-
-               
-            }
+            { }
 
         }
 
-        Nombres Nom;
         public async Task Amen()
         {
             try
@@ -334,5 +279,86 @@ namespace Charadas_2._0
             }
 
         }
+
+        public void SpeakaerBool()
+        {
+            string rec = Android.Content.PM.PackageManager.FeatureMicrophone;
+            if (rec != "android.hardware.microphone")
+            {
+                var alert = new AlertDialog.Builder(x.Context);
+                alert.SetTitle("You don't seem to have a microphone to record with");
+                alert.SetPositiveButton("OK", (sender, e) =>
+                {
+                    return;
+                });
+               // alert.Show();
+            }
+            var voiceIntent = new Intent(RecognizerIntent.ActionRecognizeSpeech);
+            voiceIntent.PutExtra(RecognizerIntent.ExtraLanguageModel, RecognizerIntent.LanguageModelFreeForm);
+            //voiceIntent.PutExtra(RecognizerIntent.ExtraPrompt, Application.Context.GetString(Resource.String.messageSpeakNow));
+            voiceIntent.PutExtra(RecognizerIntent.ExtraSpeechInputCompleteSilenceLengthMillis, 1500);
+            voiceIntent.PutExtra(RecognizerIntent.ExtraSpeechInputPossiblyCompleteSilenceLengthMillis, 1500);
+            voiceIntent.PutExtra(RecognizerIntent.ExtraSpeechInputMinimumLengthMillis, 15000);
+            voiceIntent.PutExtra(RecognizerIntent.ExtraMaxResults, 1);
+            voiceIntent.PutExtra(RecognizerIntent.ExtraLanguage, Java.Util.Locale.Default);
+            StartActivityForResult(voiceIntent, VOICE);
+
+
+        }
+
+        protected override async void OnActivityResult(int requestCode, Result resultVal, Intent data)
+        {
+            try
+            {
+                if (requestCode == VOICE)
+            {
+                if (resultVal == Result.Ok)
+                {
+                    var matches = data.GetStringArrayListExtra(RecognizerIntent.ExtraResults);
+                    if (matches.Count != 0)
+                    {
+                        string textInput =  matches[0];
+                        Alerta.SetMessage(textInput);
+                        Alerta.Show();
+                     
+                        switch (matches[0])
+                        {
+                            case "bueno":
+                                bueno++;
+                                Layout.SetBackgroundColor(Color.Green);
+                                await Amen();
+                                Alerta.Cancel();
+                                break;
+
+                            case "malo":
+                                malo++;
+                                Layout.SetBackgroundColor(Color.Red);
+                                await Amen();
+                                Alerta.Cancel();
+                                break;
+                        }
+                    }
+                    else
+                    {
+                       
+                         Alerta.Cancel();
+                    }
+                }
+                base.OnActivityResult(requestCode, resultVal, data);
+ 
+                }
+
+            }
+            catch (Exception)
+            {}
+        }
+
+        public async Task SpeakNowDefaultSettings(string txt)
+        {
+            await TextToSpeech.SpeakAsync(txt);
+
+            // This method will block until utterance finishes.
+        }
+
     }
 }

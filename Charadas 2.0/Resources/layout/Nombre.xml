@@ -38,9 +38,11 @@
         android:layout_width="match_parent"
         android:textSize= "60dp"
         android:gravity="center"
-        android:layout_height="77.5dp"
+        android:layout_height="70.5dp"
         android:id="@+id/txtCountDown"
         android:layout_marginBottom="11.5dp"
         android:textColor="#ffffffff" />
+
+
 
 </LinearLayout>

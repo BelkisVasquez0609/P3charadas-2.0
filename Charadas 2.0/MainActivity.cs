@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Drawing;
 using Android.Graphics;
+using Xamarin.Essentials;
 
 namespace Charadas_2._0
 {
@@ -36,10 +37,12 @@ namespace Charadas_2._0
         protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.SetTheme(Resource.Style.AppTheme);
+            
             base.OnCreate(savedInstanceState);
             Thread.Sleep(2000);
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
+            await SpeakNowDefaultSettings();
             await InitDataAsync();
 
             InitView();
@@ -50,6 +53,13 @@ namespace Charadas_2._0
             //x.ToggleGyroscope();
             //Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             
+        }
+
+        public async Task SpeakNowDefaultSettings()
+        {
+            await TextToSpeech.SpeakAsync("Bienvenidos a Charadas 2.0, Profesor Willis Polanco");
+
+            // This method will block until utterance finishes.
         }
         public byte[] ImageToByteArray(System.Drawing.Image imagen)
         {
